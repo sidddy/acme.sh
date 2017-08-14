@@ -24,8 +24,21 @@ dns_schlundtech_add() {
   _info "using the schlundtech dns api"
   _debug fulldomain "$fulldomain"
   _debug txtvalue "$txtvalue"
-  _err "Not implemented!"
-  return 1
+
+  _split_domain "$fulldomain"
+  _debug "SUB: $subdomain" 
+  _debug "DOM: $domain" 
+
+  _init_request_add "$user" "$password" "$context" "$domain" "$subdomain" "$txtvalue"
+  _debug "xmladd: $xmladd" 
+
+  _send_request "$xmladd" "$server"
+  echo "$response" | grep "<code>S0202</code>"
+  result=$?
+  _debug "result: $result"
+
+  # returns 0 means success, otherwise error.
+  return "$result"
 }
 
 
@@ -39,7 +52,23 @@ dns_schlundtech_rm() {
   _info "using schlundtech dns api"
   _debug fulldomain "$fulldomain"
   _debug txtvalue "$txtvalue"
+  
+  _split_domain "$fulldomain"
+  _debug "SUB: $subdomain" 
+  _debug "DOM: $domain" 
+
+  _init_request_rm "$user" "$password" "$context" "$domain" "$subdomain" "$txtvalue"
+  _debug "xmlrm:  $xmlrm" 
+
+  _send_request "$xmlrm" "$server"
+  echo "$response" | grep "<code>S0202</code>"
+  result=$?
+  _debug "result: $result"
+    
+  # no return value documented
+  #return "$result"
 }
+
 
 ####################  Private functions below ##################################
 
