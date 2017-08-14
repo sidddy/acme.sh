@@ -101,3 +101,9 @@ _init_requests() {
 	xmladd="$(echo "$xmladd" | sed "$sedcmd")"
 	xmlrm="$(echo "$xmlrm"  | sed "$sedcmd")" 
 }
+
+
+_send_request() {
+  local request="$1"
+  curl -H "Content-type: text/xml" --data-binary "${request}" https://gateway.schlundtech.de/ | xmlpp.pl
+}
