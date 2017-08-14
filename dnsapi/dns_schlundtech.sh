@@ -126,5 +126,8 @@ _init_request_rm() {
 
 _send_request() {
   local request="$1"
-  curl -H "Content-type: text/xml" --data-binary "${request}" https://gateway.schlundtech.de/ | xmlpp.pl
+  local url="$2"
+
+  response="$(curl -s -H "Content-type: text/xml" --data-binary "${request}" "${url}")"
+  _debug "response: $response"
 }
