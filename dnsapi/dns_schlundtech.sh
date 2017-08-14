@@ -1,33 +1,38 @@
 #!/bin/bash
 
-#Here is a sample custom api script.
-#This file name is "dns_myapi.sh"
-#So, here must be a method   dns_myapi_add()
-#Which will be called by acme.sh to add the txt record to your api system.
-#returns 0 means success, otherwise error.
+########
+# This is a custom DNS adapter for the german Schlundtech domain provider.
+# Use as DNS api with the acme.sh LetsEncrypt script.
+# See https://github.com/Neilpang/acme.sh for more information.
 #
-#Author: Neilpang
-#Report Bugs here: https://github.com/Neilpang/acme.sh
+# Usage: acme.sh --issue --dns dns_schlundtech -d www.domain.com
 #
+# Author: Holger Böhnke
+# Report Bugs here: https://github.com/hmb/acme.sh
+#
+########
+
 ########  Public functions #####################
 
-#Usage: dns_myapi_add   _acme-challenge.www.domain.com   "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
-dns_myapi_add() {
-  fulldomain=$1
-  txtvalue=$2
-  _info "Using myapi"
+# Usage: dns_myapi_add   _acme-challenge.www.domain.com   "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
+dns_schlundtech_add() {
+  local fulldomain=$1
+  local txtvalue=$2
+  
+  _info "using schlundtech dns api"
   _debug fulldomain "$fulldomain"
   _debug txtvalue "$txtvalue"
   _err "Not implemented!"
   return 1
 }
 
-#Usage: fulldomain txtvalue
-#Remove the txt record after validation.
-dns_myapi_rm() {
-  fulldomain=$1
-  txtvalue=$2
-  _info "Using myapi"
+# Usage: fulldomain txtvalue
+# Remove the txt record after validation.
+dns_schlundtech_rm() {
+  local fulldomain=$1
+  local txtvalue=$2
+  
+  _info "using schlundtech dns api"
   _debug fulldomain "$fulldomain"
   _debug txtvalue "$txtvalue"
 }
