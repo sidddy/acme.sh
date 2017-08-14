@@ -39,59 +39,57 @@ dns_schlundtech_rm() {
 
 ####################  Private functions below ##################################
 
-read -r -d '' xmladd <<EOFXML
-<?xml version="1.0" encoding="utf-8"?>
-<request>
-  <auth>
-    <user>0000000</user>
-    <password>xxxxxxxxxxxxxxxxxxxx</password>
-    <context>10</context>
-  </auth>
-  <task>
-    <code>0202001</code>
-    <default>
-      <rr_add>
-        <name>{subdomain}</name>
-        <type>TXT</type>
-        <value>{value}</value>
-        <ttl>60</ttl>
-      </rr_add>
-    </default>
-    <zone>
-      <name>{domain}</name>
-    </zone>
-  </task>
-</request>
-EOFXML
+_init_requests() {
+  local domain=$1
+  local subdomain=$2
+  local value=$3
+  local sedcmd="s/{domain}/${domain}/;s/{subdomain}/${subdomain}/;s/{value}/${value}/;"
 
+	xmladd='<?xml version="1.0" encoding="utf-8"?>
+	<request>
+	  <auth>
+	    <user>0000000</user>
+	    <password>xxxxxxxxxxxxxxxxxxxx</password>
+	    <context>10</context>
+	  </auth>
+	  <task>
+	    <code>0202001</code>
+	    <default>
+	      <rr_add>
+	        <name>{subdomain}</name>
+	        <type>TXT</type>
+	        <value>{value}</value>
+	        <ttl>60</ttl>
+	      </rr_add>
+	    </default>
+	    <zone>
+	      <name>{domain}</name>
+	    </zone>
+	  </task>
+	</request>'
 
+	xmlrm='<?xml version="1.0" encoding="utf-8"?>
+	<request>
+	  <auth>
+	    <user>0000000</user>
+	    <password>xxxxxxxxxxxxxxxxxxxx</password>
+	    <context>10</context>
+	  </auth>
+	  <task>
+	    <code>0202001</code>
+	    <default>
+	      <rr_rem>
+	        <name>{subdomain}</name>
+	        <type>TXT</type>
+	        <value>{value}</value>
+	      </rr_rem>
+	    </default>
+	    <zone>
+	      <name>{domain}</name>
+	    </zone>
+	  </task>
+	</request>'
 
-read -r -d '' xmlrm <<EOFXML
-<?xml version="1.0" encoding="utf-8"?>
-<request>
-  <auth>
-    <user>0000000</user>
-    <password>xxxxxxxxxxxxxxxxxxxx</password>
-    <context>10</context>
-  </auth>
-  <task>
-    <code>0202001</code>
-    <default>
-      <rr_rem>
-        <name>{subdomain}</name>
-        <type>TXT</type>
-        <value>{value}</value>
-      </rr_rem>
-    </default>
-    <zone>
-      <name>{domain}</name>
-    </zone>
-  </task>
-</request>
-EOFXML
-
-echo "----------------"
-echo "$xmladd" | sed 's/{domain}/example.com/;s/{subdomain}/acmedom/;s/{value}/wurst/' 
-echo "----------------"
-echo "$xmlrm" | sed 's/{domain}/example.com/;s/{subdomain}/acmedom/;s/{value}/wurst/' 
-echo "----------------"
+	xmladd="$(echo "$xmladd" | sed "$sedcmd")"
+	xmlrm="$(echo "$xmlrm"  | sed "$sedcmd")" 
+}
