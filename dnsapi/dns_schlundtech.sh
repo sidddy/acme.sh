@@ -8,30 +8,34 @@
 # Usage: acme.sh --issue --dns dns_schlundtech -d www.domain.com
 #
 # Author: Holger Böhnke
-# Report Bugs here: https://github.com/hmb/acme.sh
+# Report bugs here: https://github.com/hmb/acme.sh
 #
 ########
 
 ########  Public functions #####################
 
-# Usage: dns_myapi_add   _acme-challenge.www.domain.com   "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
+# Add the txt record before validation.
+# Usage: dns_schlundtech_add _acme-challenge.www.domain.com "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
+
 dns_schlundtech_add() {
   local fulldomain=$1
   local txtvalue=$2
-  
-  _info "using schlundtech dns api"
+
+  _info "using the schlundtech dns api"
   _debug fulldomain "$fulldomain"
   _debug txtvalue "$txtvalue"
   _err "Not implemented!"
   return 1
 }
 
-# Usage: fulldomain txtvalue
+
 # Remove the txt record after validation.
+# Usage: dns_schlundtech_rm _acme-challenge.www.domain.com "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
+
 dns_schlundtech_rm() {
   local fulldomain=$1
   local txtvalue=$2
-  
+
   _info "using schlundtech dns api"
   _debug fulldomain "$fulldomain"
   _debug txtvalue "$txtvalue"
