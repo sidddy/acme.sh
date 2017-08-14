@@ -39,6 +39,14 @@ dns_schlundtech_rm() {
 
 ####################  Private functions below ##################################
 
+_split_domain() {
+  local fulldomain=$1
+  
+  domain="$(echo $fulldomain | sed 's/.*\.\([^.]*\.[^.]*\)/\1/')" 
+  subdomain="$(echo $fulldomain | sed 's/\(.*\)\.[^.]*\.[^.]*/\1/')"
+}
+
+
 _init_requests() {
   local domain=$1
   local subdomain=$2
