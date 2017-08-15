@@ -33,8 +33,8 @@ SLTEC_server_default="https://gateway.schlundtech.de/"
 # Usage: dns_schlundtech_add _acme-challenge.www.domain.com "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
 
 dns_schlundtech_add() {
-  local fulldomain=$1
-  local txtvalue=$2
+  local fulldomain="$1"
+  local txtvalue="$2"
 
   _SLTEC_credentials
   if [ "$?" -ne 0 ]; then
@@ -67,8 +67,8 @@ dns_schlundtech_add() {
 # Usage: dns_schlundtech_rm _acme-challenge.www.domain.com "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
 
 dns_schlundtech_rm() {
-  local fulldomain=$1
-  local txtvalue=$2
+  local fulldomain="$1"
+  local txtvalue="$2"
 
   _SLTEC_credentials
   if [ "$?" -ne 0 ]; then
@@ -126,7 +126,7 @@ _SLTEC_credentials() {
 
 
 _SLTEC_split_domain() {
-  local fulldomain=$1
+  local fulldomain="$1"
   
   domain="$(echo $fulldomain | sed 's/.*\.\([^.]*\.[^.]*\)/\1/')" 
   subdomain="$(echo $fulldomain | sed 's/\(.*\)\.[^.]*\.[^.]*/\1/')"
