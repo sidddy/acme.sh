@@ -51,12 +51,12 @@ dns_schlundtech_add() {
   _debug "txtvalue  : ${txtvalue}"
 
   _SLTEC_init_request_add "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$_SLTEC_domain" "$_SLTEC_subdomain" "$txtvalue"
-  _debug "xmladd: $_SLTEC_xmladd" 
+  _debug "xmladd: ${_SLTEC_xmladd}" 
 
   _SLTEC_send_request "$_SLTEC_xmladd" "$SLTEC_server"
   echo "$_SLTEC_response" | grep "<code>S0202</code>"
   local result="$?"
-  _debug "result: $result"
+  _debug "result: ${result}"
 
   # returns 0 means success, otherwise error.
   return "$result"
@@ -85,12 +85,12 @@ dns_schlundtech_rm() {
   _debug "subdomain : ${_SLTEC_subdomain}" 
 
   _SLTEC_init_request_rm "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$_SLTEC_domain" "$_SLTEC_subdomain" "$txtvalue"
-  _debug "xmlrm:  $_SLTEC_xmlrm" 
+  _debug "xmlrm:  ${_SLTEC_xmlrm}" 
 
   _SLTEC_send_request "$_SLTEC_xmlrm" "$SLTEC_server"
   echo "$_SLTEC_response" | grep "<code>S0202</code>"
   local result="$?"
-  _debug "result: $result"
+  _debug "result: ${result}"
     
   # no return value documented
   #return "$result"
@@ -128,8 +128,8 @@ _SLTEC_credentials() {
 _SLTEC_split_domain() {
   local fulldomain="$1"
   
-  _SLTEC_domain="$(echo $fulldomain | sed 's/.*\.\([^.]*\.[^.]*\)/\1/')" 
-  _SLTEC_subdomain="$(echo $fulldomain | sed 's/\(.*\)\.[^.]*\.[^.]*/\1/')"
+  _SLTEC_domain="$(echo "$fulldomain" | sed 's/.*\.\([^.]*\.[^.]*\)/\1/')" 
+  _SLTEC_subdomain="$(echo "$fulldomain" | sed 's/\(.*\)\.[^.]*\.[^.]*/\1/')"
 }
 
 
@@ -203,5 +203,5 @@ _SLTEC_send_request() {
   local url="$2"
 
   _SLTEC_response="$(curl -s -H "Content-type: text/xml" --data-binary "${request}" "${url}")"
-  _debug "response: $_SLTEC_response"
+  _debug "response: ${_SLTEC_response}"
 }
