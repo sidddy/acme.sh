@@ -12,7 +12,7 @@
 #
 ########
 
-########  Public functions #####################
+########  public functions #####################
 
 # Add the txt record before validation.
 # Usage: dns_schlundtech_add _acme-challenge.www.domain.com "XKrxpRBosdIKFzxW_CT3KLZNf6q0HG9i01zxXp5CPBs"
@@ -70,7 +70,7 @@ dns_schlundtech_rm() {
 }
 
 
-####################  Private functions below ##################################
+####################  private functions below ##################################
 
 _split_domain() {
   local fulldomain=$1
