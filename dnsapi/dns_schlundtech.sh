@@ -42,7 +42,7 @@ dns_schlundtech_add() {
     return 1
   fi
 
-  _split_domain "$fulldomain"
+  _SLTEC_split_domain "$fulldomain"
 
   _info "using the schlundtech dns api"
   _debug "fulldomain: ${fulldomain}"
@@ -50,10 +50,10 @@ dns_schlundtech_add() {
   _debug "subdomain : ${subdomain}" 
   _debug "domain    : ${domain}" 
 
-  _init_request_add "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$domain" "$subdomain" "$txtvalue"
+  _SLTEC_init_request_add "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$domain" "$subdomain" "$txtvalue"
   _debug "xmladd: $xmladd" 
 
-  _send_request "$xmladd" "$SLTEC_server"
+  _SLTEC_send_request "$xmladd" "$SLTEC_server"
   echo "$response" | grep "<code>S0202</code>"
   result=$?
   _debug "result: $result"
@@ -76,7 +76,7 @@ dns_schlundtech_rm() {
     return 1
   fi
 
-  _split_domain "$fulldomain"
+  _SLTEC_split_domain "$fulldomain"
 
   _info "using schlundtech dns api"
   _debug "fulldomain: ${fulldomain}"
@@ -84,10 +84,10 @@ dns_schlundtech_rm() {
   _debug "subdomain : ${subdomain}" 
   _debug "domain    : ${domain}" 
 
-  _init_request_rm "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$domain" "$subdomain" "$txtvalue"
+  _SLTEC_init_request_rm "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$domain" "$subdomain" "$txtvalue"
   _debug "xmlrm:  $xmlrm" 
 
-  _send_request "$xmlrm" "$SLTEC_server"
+  _SLTEC_send_request "$xmlrm" "$SLTEC_server"
   echo "$response" | grep "<code>S0202</code>"
   result=$?
   _debug "result: $result"
@@ -125,7 +125,7 @@ _SLTEC_credentials() {
 }
 
 
-_split_domain() {
+_SLTEC_split_domain() {
   local fulldomain=$1
   
   domain="$(echo $fulldomain | sed 's/.*\.\([^.]*\.[^.]*\)/\1/')" 
@@ -133,7 +133,7 @@ _split_domain() {
 }
 
 
-_init_request_add() {
+_SLTEC_init_request_add() {
   local user="$1"
   local password="$2"
   local context="$3"
@@ -166,7 +166,7 @@ _init_request_add() {
 }
 
 
-_init_request_rm() {
+_SLTEC_init_request_rm() {
   local user="$1"
   local password="$2"
   local context="$3"
@@ -198,7 +198,7 @@ _init_request_rm() {
 }
 
 
-_send_request() {
+_SLTEC_send_request() {
   local request="$1"
   local url="$2"
 
