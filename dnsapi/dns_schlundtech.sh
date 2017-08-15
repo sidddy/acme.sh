@@ -141,32 +141,28 @@ _init_request_add() {
   local subdomain="$5"
   local value="$6"
 
-  local sedcmd="s/{user}/${user}/;s/{password}/${password}/;s/{context}/${context}/;s/{domain}/${domain}/;s/{subdomain}/${subdomain}/;s/{value}/${value}/;"
-
-  xmladd='<?xml version="1.0" encoding="utf-8"?>
+  xmladd="<?xml version='1.0' encoding='utf-8'?>
   <request>
     <auth>
-      <user>{user}</user>
-      <password>{password}</password>
-      <context>{context}</context>
+      <user>${user}</user>
+      <password>${password}</password>
+      <context>${context}</context>
     </auth>
     <task>
       <code>0202001</code>
       <default>
         <rr_add>
-          <name>{subdomain}</name>
+          <name>${subdomain}</name>
           <type>TXT</type>
-          <value>{value}</value>
+          <value>${value}</value>
           <ttl>60</ttl>
         </rr_add>
       </default>
       <zone>
-        <name>{domain}</name>
+        <name>${domain}</name>
       </zone>
     </task>
-  </request>'
-
-  xmladd="$(echo "$xmladd" | sed "$sedcmd")"
+  </request>"
 }
 
 
@@ -178,31 +174,27 @@ _init_request_rm() {
   local subdomain="$5"
   local value="$6"
 
-  local sedcmd="s/{user}/${user}/;s/{password}/${password}/;s/{context}/${context}/;s/{domain}/${domain}/;s/{subdomain}/${subdomain}/;s/{value}/${value}/;"
-
-  xmlrm='<?xml version="1.0" encoding="utf-8"?>
+  xmlrm="<?xml version='1.0' encoding='utf-8'?>
   <request>
     <auth>
-      <user>{user}</user>
-      <password>{password}</password>
-      <context>{context}</context>
+      <user>${user}</user>
+      <password>${password}</password>
+      <context>${context}</context>
     </auth>
     <task>
       <code>0202001</code>
       <default>
         <rr_rem>
-          <name>{subdomain}</name>
+          <name>${subdomain}</name>
           <type>TXT</type>
-          <value>{value}</value>
+          <value>${value}</value>
         </rr_rem>
       </default>
       <zone>
-        <name>{domain}</name>
+        <name>${domain}</name>
       </zone>
     </task>
-  </request>'
-
-  xmlrm="$(echo "$xmlrm"  | sed "$sedcmd")" 
+  </request>"
 }
 
 
