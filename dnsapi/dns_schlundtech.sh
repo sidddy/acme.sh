@@ -12,6 +12,21 @@
 #
 ########
 
+########  initialization #######################
+
+# always set these values, when using the provider the first time
+#export SLTEC_user="0000000"
+#export SLTEC_password="********************"
+
+# set these values if they differ from the default below
+#export SLTEC_context="10"
+#export SLTEC_server="https://gateway.schlundtech.de/"
+
+# default values for schlundtech dns requests, if not give above
+SLTEC_context_default="10"
+SLTEC_server_default="https://gateway.schlundtech.de/"
+
+
 ########  public functions #####################
 
 # Add the txt record before validation.
@@ -21,18 +36,24 @@ dns_schlundtech_add() {
   local fulldomain=$1
   local txtvalue=$2
 
-  _info "using the schlundtech dns api"
-  _debug fulldomain "$fulldomain"
-  _debug txtvalue "$txtvalue"
+  _SLTEC_credentials
+  if [ "$?" -ne 0 ]; then
+    _err "Please specify the SchlundTech user and password and try again."
+    return 1
+  fi
 
   _split_domain "$fulldomain"
-  _debug "SUB: $subdomain" 
-  _debug "DOM: $domain" 
 
-  _init_request_add "$user" "$password" "$context" "$domain" "$subdomain" "$txtvalue"
+  _info "using the schlundtech dns api"
+  _debug "fulldomain: ${fulldomain}"
+  _debug "txtvalue  : ${txtvalue}"
+  _debug "subdomain : ${subdomain}" 
+  _debug "domain    : ${domain}" 
+
+  _init_request_add "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$domain" "$subdomain" "$txtvalue"
   _debug "xmladd: $xmladd" 
 
-  _send_request "$xmladd" "$server"
+  _send_request "$xmladd" "$SLTEC_server"
   echo "$response" | grep "<code>S0202</code>"
   result=$?
   _debug "result: $result"
@@ -49,18 +70,24 @@ dns_schlundtech_rm() {
   local fulldomain=$1
   local txtvalue=$2
 
-  _info "using schlundtech dns api"
-  _debug fulldomain "$fulldomain"
-  _debug txtvalue "$txtvalue"
-  
-  _split_domain "$fulldomain"
-  _debug "SUB: $subdomain" 
-  _debug "DOM: $domain" 
+  _SLTEC_credentials
+  if [ "$?" -ne 0 ]; then
+    _err "Please specify the SchlundTech user and password and try again."
+    return 1
+  fi
 
-  _init_request_rm "$user" "$password" "$context" "$domain" "$subdomain" "$txtvalue"
+  _split_domain "$fulldomain"
+
+  _info "using schlundtech dns api"
+  _debug "fulldomain: ${fulldomain}"
+  _debug "txtvalue  : ${txtvalue}"
+  _debug "subdomain : ${subdomain}" 
+  _debug "domain    : ${domain}" 
+
+  _init_request_rm "$SLTEC_user" "$SLTEC_password" "$SLTEC_context" "$domain" "$subdomain" "$txtvalue"
   _debug "xmlrm:  $xmlrm" 
 
-  _send_request "$xmlrm" "$server"
+  _send_request "$xmlrm" "$SLTEC_server"
   echo "$response" | grep "<code>S0202</code>"
   result=$?
   _debug "result: $result"
@@ -71,6 +98,32 @@ dns_schlundtech_rm() {
 
 
 ####################  private functions below ##################################
+
+_SLTEC_credentials() {
+
+  if [ -z "${SLTEC_context}" ]; then
+    SLTEC_context="${SLTEC_context_default}"
+  fi
+
+  if [ -z "${SLTEC_server}" ]; then
+    SLTEC_server="${SLTEC_server_default}"
+  fi
+
+  if [ -z "${SLTEC_user}" ] || [ -z "$SLTEC_password" ] || [ -z "${SLTEC_context}" ] || [ -z "${SLTEC_server}" ]; then
+    SLTEC_user=""
+    SLTEC_password=""
+    SLTEC_context=""
+    SLTEC_server=""
+    return 1
+  else
+    _saveaccountconf SLTEC_user "${SLTEC_user}"
+    _saveaccountconf SLTEC_password "${SLTEC_password}"
+    _saveaccountconf SLTEC_context "${SLTEC_context}"
+    _saveaccountconf SLTEC_server "${SLTEC_server}"
+    return 0
+  fi
+}
+
 
 _split_domain() {
   local fulldomain=$1
